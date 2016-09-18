@@ -10,7 +10,7 @@ OBJDIR  = ./obj/
 
 SMEMDIR = ./src/sharedMemory/
 
-OBJ   = $(OBJDIR)lamportSim.o $(OBJDIR)InternalEvent.o \
+OBJ   = $(OBJDIR)lamportSim.o $(OBJDIR)InternalEvent.o $(OBJDIR)semaphore.o \
 	   $(OBJDIR)LogicalClock.o $(OBJDIR)Mailbox.o $(OBJDIR)utils.o \
 	   $(OBJDIR)Message.o $(OBJDIR)Process.o $(OBJDIR)ReceiveEvent.o \
 	   $(OBJDIR)SendEvent.o 
@@ -56,6 +56,9 @@ $(OBJDIR)SendEvent.o : $(SRCDIR)SendEvent.cpp
 	
 $(OBJDIR)Mailbox.o : $(SMEMDIR)Mailbox.cpp
 	$(CPP) $(CFLAGS) $(INCLUDES) $(SMEMDIR)Mailbox.cpp -o $(OBJDIR)Mailbox.o
+	
+$(OBJDIR)semaphore.o : $(SMEMDIR)semaphore.c
+	$(CPP) $(CFLAGS) $(INCLUDES) $(SMEMDIR)semaphore.c -o $(OBJDIR)semaphore.o
 	
 $(OBJDIR)utils.o : $(SRCDIR)utils.c
 	$(CPP) $(CFLAGS) -I$(INCLUDES) $(SRCDIR)utils.c -o $(OBJDIR)utils.o

@@ -22,6 +22,7 @@ private:
 	int num_processes;
 	unsigned int eventProb;
 	unsigned int byztProb;
+	char logFile[10];
 	Comms* communications;
 	Event* createRandomEvent();
 };

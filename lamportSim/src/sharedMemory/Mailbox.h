@@ -13,6 +13,7 @@
 
 #include "Comms.h"
 #include "Message.h"
+#include "semaphore.h"
 
 #define MAILBOX_CAPACITY (100)
 #define NUM_PROC (4)
@@ -24,7 +25,7 @@
 }packet_t;*/
 
 typedef struct{
-	pthread_mutex_t locks[NUM_PROC];
+	semaphore_t lock;
 	unsigned int head[NUM_PROC];
 	unsigned int tail[NUM_PROC];
 	packet_t messages[NUM_PROC * MAILBOX_CAPACITY];

@@ -64,16 +64,16 @@ double getCurrentTime(void){
 
 /******************************************************************************
 * Function name: writeToFile
-* Parameters: None
-* Return: seconds since epoch.
+* Parameters: fileName, proc, eventProb, bztProb, time
+* Return: none.
 *
-* Description: This function returns the current time since epoch in seconds .
+* Description: This function saves simulation data to file
 *******************************************************************************/
-void writeToFile(char* fileName, int proc, int N, double time){
+void writeToFile(char* fileName, int proc, float eventProb, float bztProb, unsigned int time){
 	FILE* fd;
 	if((fd = fopen(fileName, "a")) == NULL){
 		perror("Cannot open output file \n");
 		exit(EXIT_FAILURE);
 	}
-	fprintf(fd,"%i\t%i\t%i\n",proc,N,time);
+	fprintf(fd,"%i\t%f\t%f\t%i\n",proc,eventProb, bztProb, time);
 }

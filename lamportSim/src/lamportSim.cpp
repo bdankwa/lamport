@@ -28,9 +28,10 @@ int main() {
 
 	int shm_id;
 	sharedMailboxes_t* sharedMemory;
+	semaphore_t lock;
 
 	int i;
-	int pid;
+	int pids[NUM_OF_PROCESSES];
 	int status;
 
 	/* create a shared memory region*/
@@ -45,8 +46,18 @@ int main() {
 		exit(EXIT_FAILURE);
 	}
 
+	/* Map shared region to caller's address space*/
+	if ((sharedMemory = (sharedMailboxes_t*) mmap(NULL, 4096, PROT_WRITE | PROT_READ,
+			MAP_SHARED, shm_id, 0)) == (void *) -1) {
+		perror("mmap");
+		exit(EXIT_FAILURE);
+	}
+
+	semInit(&lock, 1);
+	sharedMemory->lock = lock;
+
 	for(i=0; i< NUM_OF_PROCESSES; i++){
-		if((pid = fork()) == 0){ // child process
+		if((pids[i] = fork()) == 0){ // child process
 
 			/* Map shared region to caller's address space*/
 			if ((sharedMemory = (sharedMailboxes_t*) mmap(NULL, 4096, PROT_WRITE | PROT_READ,
@@ -68,15 +79,23 @@ int main() {
 
 			exit(EXIT_SUCCESS);
 		}
-		else if (pid == -1){ // error
+		else if (pids[i] == -1){ // error
 			perror("fork");
 			exit(EXIT_FAILURE);
 		}
-		else{ // parent, go spawn more kids
-			//cout << "waited for  process " << i << endl;
-			waitpid(pid,&status, WNOHANG);
+		else{
+			;
 		}
 	}
+
+	for(i=0; i< NUM_OF_PROCESSES; i++){
+	    while (-1 == waitpid(pids[i], &status, 0));
+	    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
+	        cerr << "Process " << i << " (pid " << pids[i] << ") failed" << endl;
+	        exit(1);
+	    }
+	}
+
 
 	return EXIT_SUCCESS;
 }

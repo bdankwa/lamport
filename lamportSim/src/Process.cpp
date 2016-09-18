@@ -8,6 +8,7 @@
 #include "Process.h"
 #include <iostream>
 #include <unistd.h>
+#include <stdio.h>
 
 #include "InternalEvent.h"
 #include "SendEvent.h"
@@ -27,12 +28,13 @@ Process::Process(int id, int nid, Comms* comms, unsigned int Eventprob, unsigned
 	communications = comms;
 	eventProb = Eventprob;
 	byztProb = byzantineProb;
+	sprintf(logFile, "process_%i",id);
 }
 
 void Process::run() {
 	int i;
 
-	//cout << "Process: " << proc_id << endl;
+	cout << "Process: " << proc_id << endl;
 
 	for(i=0; i<NUM_OF_ITERATIONS; i++){
 
@@ -41,6 +43,8 @@ void Process::run() {
 
 		Event* randomEvent = createRandomEvent();
 		randomEvent->execute();
+
+		writeToFile(logFile, proc_id, ((float)eventProb/10.0), ((float)byztProb/10.0), clock->getTime());
 
 
 

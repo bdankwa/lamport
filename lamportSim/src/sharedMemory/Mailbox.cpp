@@ -16,7 +16,7 @@ Mailbox::Mailbox(sharedMailboxes_t* mboxes, unsigned int proc) {
 
 	mailboxes = mboxes;
 
-	/*if(pthread_mutex_init(mailboxes->locks + proc, NULL) != 0){
+	/*if(pthread_mutex_init(&mailboxes->locks, NULL) != 0){
 		perror("pthread_mutex_init");
 	}
 
@@ -39,9 +39,11 @@ Mailbox::Mailbox(sharedMailboxes_t* mboxes, unsigned int proc) {
 int Mailbox::send(Message* m, unsigned int proc){
 	int status = 0;
 
-	pthread_mutex_lock(mailboxes->locks + proc);
+	P(&mailboxes->lock);
+	//pthread_mutex_lock(&mailboxes->locks);
 	status = writeShm(m->getContent(), proc);
-	pthread_mutex_unlock(mailboxes->locks + proc);
+	//pthread_mutex_unlock(&mailboxes->locks);
+	V(&mailboxes->lock);
 
 	return status;
 }
@@ -49,12 +51,15 @@ int Mailbox::send(Message* m, unsigned int proc){
 Message* Mailbox::receive(unsigned int proc){
 
 	packet_t data;
+	data.isValid = 0;
 
-	pthread_mutex_lock(mailboxes->locks + proc);
+	P(&mailboxes->lock);
+	//pthread_mutex_lock(&mailboxes->locks);
 	if(readShm(&data,proc) == -1){
 		cout<< "Mailbox:receive - empty buffer" << endl;
 	}
-	pthread_mutex_unlock(mailboxes->locks + proc);
+	//pthread_mutex_unlock(&mailboxes->locks);
+	V(&mailboxes->lock);
 
 	Message* msg = new Message(data); //empty message
 
@@ -85,7 +90,7 @@ int Mailbox::writeShm(packet_t data, unsigned int proc){
 	}
 
 	index = head % MAILBOX_CAPACITY;
-	*(mailboxes->messages + (proc * MAILBOX_CAPACITY) + index) = data;
+	//*(mailboxes->messages + (proc * MAILBOX_CAPACITY) + index) = data;
 
 	mailboxes->head[proc]++;
 

@@ -49,4 +49,13 @@ double generateRandomDouble();
 *******************************************************************************/
 double getCurrentTime(void);
 
+/******************************************************************************
+* Function name: writeToFile
+* Parameters: fileName, proc, eventProb, bztProb, time
+* Return: none.
+*
+* Description: This function saves simulation data to file
+*******************************************************************************/
+void writeToFile(char* fileName, int proc, float eventProb, float bztProb, unsigned int time);
+
 #endif /* UTILS_H_ */
