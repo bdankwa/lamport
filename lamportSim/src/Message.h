@@ -21,6 +21,7 @@ public:
 	Message(packet_t);
 	int size();
 	packet_t getContent();
+	void setCreatedTime(unsigned int time);
 	virtual ~Message();
 private:
 	packet_t data;

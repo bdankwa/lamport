@@ -89,7 +89,7 @@ int Mailbox::writeShm(packet_t data, unsigned int proc){
 
 	mailboxes->head[proc]++;
 
-	cout<< "writeShm:head = " << mailboxes->head[proc] << " proc: " << proc  << endl;
+	//cout<< "writeShm:head = " << mailboxes->head[proc] << " proc: " << proc  << endl;
 
 	return 0;
 }

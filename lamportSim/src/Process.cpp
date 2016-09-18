@@ -9,7 +9,11 @@
 #include <iostream>
 #include <unistd.h>
 
+#include "InternalEvent.h"
+
 using namespace std;
+
+#define NUM_OF_ITERATIONS (5)
 
 Process::Process(int id, int nid, Comms* comms) {
 
@@ -19,20 +23,33 @@ Process::Process(int id, int nid, Comms* comms) {
 }
 
 void Process::run() {
+	int i;
 
-	cout << "Process: " << proc_id << endl;
+	//cout << "Process: " << proc_id << endl;
 
-	Message* outMsg = new Message();
-	Message* inMsg;
+	for(i=0; i<NUM_OF_ITERATIONS; i++){
 
-	if(proc_id != 0){
-		communications->send(outMsg, 0);
+		Event* someEvent = new InternalEvent();
+
+		Message* outMsg = new Message();
+		outMsg->setCreatedTime(someEvent->createdAt());
+
+		Message* inMsg;
+
+		if(proc_id != 0){
+			communications->send(outMsg, 0);
+		}
+		else{
+		    sleep(1);
+			inMsg = communications->receive(0);
+			cout<< "process: "<< proc_id << " internal Event time: " << inMsg->getContent().lclock << endl;
+		}
+
+		delete outMsg;
+		delete someEvent;
+
 	}
-	else{
-	    sleep(1);
-		inMsg = communications->receive(0);
-		cout<< "lclock for proc "<< proc_id << " is " << inMsg->getContent().lclock << endl;
-	}
+
 
 
 

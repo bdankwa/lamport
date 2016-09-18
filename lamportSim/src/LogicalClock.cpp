@@ -7,12 +7,17 @@
 
 #include "LogicalClock.h"
 
-LogicalClock::LogicalClock() {
-	// TODO Auto-generated constructor stub
+unsigned int LogicalClock::time = 0;
 
+LogicalClock::LogicalClock() {}
+
+unsigned int LogicalClock::getTime(){
+	return time++;
 }
 
-LogicalClock::~LogicalClock() {
-	// TODO Auto-generated destructor stub
+void LogicalClock::reset(){
+	time = 0;
 }
+
+LogicalClock::~LogicalClock() {}
 

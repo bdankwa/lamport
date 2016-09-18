@@ -11,7 +11,11 @@
 class LogicalClock {
 public:
 	LogicalClock();
+	unsigned int getTime();
+	void reset();
 	virtual ~LogicalClock();
+private:
+	static unsigned int time;
 };
 
 #endif /* LOGICALCLOCK_H_ */

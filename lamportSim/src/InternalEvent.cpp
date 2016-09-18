@@ -8,11 +8,19 @@
 #include "InternalEvent.h"
 
 InternalEvent::InternalEvent() {
-	// TODO Auto-generated constructor stub
+	LogicalClock* clock = new LogicalClock();
+	timeCreated = clock->getTime();
+}
+
+void InternalEvent::execute(){
+	//Do nothing for internal event
 
 }
 
-InternalEvent::~InternalEvent() {
-	// TODO Auto-generated destructor stub
+unsigned int InternalEvent::createdAt(){
+	return timeCreated;
+
 }
+
+InternalEvent::~InternalEvent() {}
 

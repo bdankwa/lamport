@@ -13,7 +13,11 @@
 class InternalEvent: public Event {
 public:
 	InternalEvent();
+	void execute();
+	unsigned int createdAt();
 	virtual ~InternalEvent();
+private:
+	unsigned int timeCreated;
 };
 
 #endif /* INTERNALEVENT_H_ */

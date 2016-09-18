@@ -24,6 +24,11 @@ packet_t Message::getContent(){
 	return data;
 }
 
+void Message::setCreatedTime(unsigned int time){
+
+	data.lclock = time;
+}
+
 int Message::size() {
 
 	return dataSize;

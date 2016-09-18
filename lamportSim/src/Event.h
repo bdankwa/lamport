@@ -8,10 +8,12 @@
 #ifndef EVENT_H_
 #define EVENT_H_
 
+#include "LogicalClock.h"
+
 class Event {
 public:
-	Event();
-	virtual ~Event();
+	virtual void execute() = 0;
+	virtual unsigned int createdAt() = 0;
 };
 
 #endif /* EVENT_H_ */
