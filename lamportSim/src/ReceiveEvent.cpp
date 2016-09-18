@@ -6,6 +6,9 @@
  */
 
 #include "ReceiveEvent.h"
+#include <iostream>
+
+using namespace std;
 
 ReceiveEvent::ReceiveEvent(Comms* comms, LogicalClock* clock, unsigned int proc) {
 	communications = comms;
@@ -17,8 +20,10 @@ ReceiveEvent::ReceiveEvent(Comms* comms, LogicalClock* clock, unsigned int proc)
 void ReceiveEvent::execute(){
 	processClock->tick();
 	Message* inMsg = communications->receive(process);
+
 	if( inMsg->isValid() && (processClock->getTime() <= inMsg->getContent().lclock)){
 		processClock->setTime((inMsg->getContent().lclock) + 1);
+		cout << "Process:" << process <<"Advanced my clock"<<endl;
 	}
 }
 

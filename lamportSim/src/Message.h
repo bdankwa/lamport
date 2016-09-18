@@ -13,7 +13,7 @@
 typedef struct {
 	unsigned int lclock;
 	unsigned int payload[MAX_PAYLOAD_SIZE];
-	unsigned int isValid;
+	unsigned int validityCode;
 }packet_t;
 
 class Message {

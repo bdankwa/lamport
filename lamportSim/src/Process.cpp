@@ -17,7 +17,7 @@
 
 using namespace std;
 
-#define NUM_OF_ITERATIONS (5)
+#define NUM_OF_ITERATIONS (100)
 #define NUM_OF_PROC (4)
 
 Process::Process(int id, int nid, Comms* comms, unsigned int Eventprob, unsigned int byzantineProb) {
@@ -33,18 +33,32 @@ Process::Process(int id, int nid, Comms* comms, unsigned int Eventprob, unsigned
 
 void Process::run() {
 	int i;
+	int randomNumber;
+	Event* rcvEvent = NULL;
+	Event* randomEvent = NULL;
 
-	cout << "Process: " << proc_id << endl;
+	//cout << "Process: " << proc_id << endl;
 
 	for(i=0; i<NUM_OF_ITERATIONS; i++){
 
-		Event* rcvEvent = new ReceiveEvent(communications, clock, proc_id);
-		rcvEvent->execute();
+		randomNumber = generateRandomInt(1, 10);
 
-		Event* randomEvent = createRandomEvent();
-		randomEvent->execute();
+		if(randomNumber == 5){
 
-		writeToFile(logFile, proc_id, ((float)eventProb/10.0), ((float)byztProb/10.0), clock->getTime());
+		}
+		else{
+			rcvEvent = new ReceiveEvent(communications, clock, proc_id);
+			if(rcvEvent != NULL){
+				rcvEvent->execute();
+			}
+		}
+
+		randomEvent = createRandomEvent();
+		if(randomEvent != NULL){
+			randomEvent->execute();
+		}
+
+		writeToFile(logFile, proc_id, i, ((float)eventProb/10.0), ((float)byztProb/10.0), clock->getTime());
 
 
 
@@ -62,18 +76,22 @@ void Process::run() {
 			cout<< "process: "<< proc_id << " internal Event time: " << inMsg->getContent().lclock << endl;
 		} */
 
-		delete randomEvent;
-		delete rcvEvent;
+		/*if(rcvEvent != NULL){
+			delete rcvEvent;
+		}
+		if(randomEvent != NULL){
+			delete randomEvent;
+		}*/
 
 	}
 }
 
 Event* Process::createRandomEvent() {
 
-	Event* event;
+	Event* event = NULL;
 
 	int selection = generateRandomInt(1, 10);
-	unsigned int randomProc = generateRandomInt(0, NUM_OF_PROC-1);
+	unsigned int randomDestination = generateRandomInt(0, NUM_OF_PROC-1);
 
 	switch (eventProb) {
 	case 1 : // 0.1 probability
@@ -81,7 +99,7 @@ Event* Process::createRandomEvent() {
 			event = new InternalEvent(clock);
 		}
 		if(selection == 10){
-			event = new SendEvent(communications, randomProc, clock);
+			event = new SendEvent(communications, randomDestination, clock);
 		}
 		break;
 	case 2 : // 0.2 probability
@@ -89,7 +107,7 @@ Event* Process::createRandomEvent() {
 			event = new InternalEvent(clock);
 		}
 		if(selection >= 9){
-			event = new SendEvent(communications, randomProc, clock);
+			event = new SendEvent(communications, randomDestination, clock);
 		}
 		break;
 	case 3: // 0.3 probability
@@ -97,7 +115,7 @@ Event* Process::createRandomEvent() {
 			event =  new InternalEvent(clock);
 		}
 		if(selection >= 8){
-			event =  new SendEvent(communications, randomProc, clock);
+			event =  new SendEvent(communications, randomDestination, clock);
 		}
 		break;
 	case 4: // 0.4 probability
@@ -105,7 +123,7 @@ Event* Process::createRandomEvent() {
 			event =  new InternalEvent(clock);
 		}
 		if(selection >= 7){
-			event =  new SendEvent(communications, randomProc, clock);
+			event =  new SendEvent(communications, randomDestination, clock);
 		}
 		break;
 	case 5: // 0.5 probability
@@ -113,7 +131,7 @@ Event* Process::createRandomEvent() {
 			event =  new InternalEvent(clock);
 		}
 		if(selection >= 6){
-			event =  new SendEvent(communications, randomProc, clock);
+			event =  new SendEvent(communications, randomDestination, clock);
 		}
 		break;
 	default:

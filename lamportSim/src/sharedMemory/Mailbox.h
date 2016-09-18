@@ -15,14 +15,8 @@
 #include "Message.h"
 #include "semaphore.h"
 
-#define MAILBOX_CAPACITY (100)
+#define MAILBOX_CAPACITY (20)
 #define NUM_PROC (4)
-
-
-/*typedef struct {
-	unsigned int lclock;
-	unsigned int payload[10];
-}packet_t;*/
 
 typedef struct{
 	semaphore_t lock;
@@ -41,8 +35,8 @@ public:
 	unsigned int getCapacity();
 private:
 	sharedMailboxes_t* mailboxes;
-	int writeShm(packet_t data, unsigned int);
-	int readShm(packet_t* data, unsigned int);
+	int writeShm(packet_t data, unsigned int destination);
+	int readShm(packet_t* data, unsigned int source);
 	unsigned int proc_id;
 };
 

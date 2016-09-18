@@ -7,11 +7,13 @@
 
 #include "Message.h"
 
+#define VALID_DATA (0xDEADBEEF)
+
 Message::Message() {
 	// TODO Auto-generated constructor stub
 	dataSize = 0;
 	data.lclock = 0;
-	data.isValid = 0;
+	data.validityCode = 0;
 }
 
 Message::Message(packet_t data) {
@@ -27,14 +29,17 @@ packet_t Message::getContent(){
 
 void Message::setValid(bool setValid){
 	if(setValid){
-		data.isValid = 1;
+		data.validityCode = VALID_DATA;
+	}
+	else{
+		data.validityCode = 0;
 	}
 
 }
 
 bool Message::isValid(){
 
-	if(data.isValid){
+	if(data.validityCode == VALID_DATA){
 		return true;
 	}
 	else{

@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "utils.h"
 
@@ -69,11 +70,14 @@ double getCurrentTime(void){
 *
 * Description: This function saves simulation data to file
 *******************************************************************************/
-void writeToFile(char* fileName, int proc, float eventProb, float bztProb, unsigned int time){
+void writeToFile(char* fileName, int proc, unsigned int iteration,
+		float eventProb, float bztProb, unsigned int time){
 	FILE* fd;
 	if((fd = fopen(fileName, "a")) == NULL){
 		perror("Cannot open output file \n");
 		exit(EXIT_FAILURE);
 	}
-	fprintf(fd,"%i\t%f\t%f\t%i\n",proc,eventProb, bztProb, time);
+	fprintf(fd,"%i\t%i\t%f\t%f\t%i\n",proc, iteration, eventProb, bztProb, time);
+
+	fclose(fd);
 }

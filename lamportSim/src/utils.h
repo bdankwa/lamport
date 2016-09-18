@@ -56,6 +56,7 @@ double getCurrentTime(void);
 *
 * Description: This function saves simulation data to file
 *******************************************************************************/
-void writeToFile(char* fileName, int proc, float eventProb, float bztProb, unsigned int time);
+void writeToFile(char* fileName, int proc, unsigned int iteration,
+		float eventProb, float bztProb, unsigned int time);
 
 #endif /* UTILS_H_ */

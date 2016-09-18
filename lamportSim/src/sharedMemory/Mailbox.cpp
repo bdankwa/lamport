@@ -41,11 +41,11 @@ int Mailbox::send(Message* m, unsigned int destination){
 	int status = 0;
 
 	P(&mailboxes->lock);
-	cout<< "Process-"<< proc_id << "locking for write." << endl;
+	//cout<< "Process-"<< proc_id << "locking for write." << endl;
 	//pthread_mutex_lock(&mailboxes->locks);
 	status = writeShm(m->getContent(), destination);
 	//pthread_mutex_unlock(&mailboxes->locks);
-	cout<< "Process-"<< proc_id << "unlocking write." << endl;
+	//cout<< "Process-"<< proc_id << "unlocking write." << endl;
 	V(&mailboxes->lock);
 
 	return status;
@@ -54,7 +54,7 @@ int Mailbox::send(Message* m, unsigned int destination){
 Message* Mailbox::receive(unsigned int src){
 
 	packet_t data;
-	data.isValid = 0;
+	data.validityCode = 0;
 
 	//P(&mailboxes->lock);
 	//cout<< "Process-"<< proc_id << "locking for read." << endl;
@@ -95,7 +95,7 @@ int Mailbox::writeShm(packet_t data, unsigned int destination){
 	}
 
 	index = head % MAILBOX_CAPACITY;
-	//*(mailboxes->messages + (proc * MAILBOX_CAPACITY) + index) = data;
+	(mailboxes->messages + (destination * MAILBOX_CAPACITY))[index] = data;
 
 	mailboxes->head[destination]++;
 
@@ -104,22 +104,22 @@ int Mailbox::writeShm(packet_t data, unsigned int destination){
 	return 0;
 }
 
-int Mailbox::readShm(packet_t* data, unsigned int destination){
+int Mailbox::readShm(packet_t* data, unsigned int source){
 	unsigned int index = 0;
 	unsigned int head;
 	unsigned int tail;
 
-	head = mailboxes->head[destination];
-	tail = mailboxes->tail[destination];
+	head = mailboxes->head[source];
+	tail = mailboxes->tail[source];
 
 	if((head - tail) == 0){
 		return -1; // empty buffer
 	}
 
 	index = tail % MAILBOX_CAPACITY;
-	*data = *(mailboxes->messages + (destination * MAILBOX_CAPACITY) + index);
+	*data = *(mailboxes->messages + (source * MAILBOX_CAPACITY) + index);
 
-	mailboxes->tail[destination]++;
+	mailboxes->tail[source]++;
 
 	//cout<< "readShm:lclock = " << data->lclock << endl;
 
