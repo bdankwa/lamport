@@ -8,19 +8,22 @@
 #include "Mailbox.h"
 
 Mailbox::Mailbox() {
-	// TODO Auto-generated constructor stub
+	MAILBOX_CAPACITY = 100;
 	pthread_mutex_init(&_lock, NULL);
 
 }
 
 int Mailbox::send(Message& m){
 
+	if(_mailbox.size() > MAILBOX_CAPACITY){
+		destroyCurrentMessage();
+	}
 	_mailbox.push(m);
 
 	return 0;
 }
 
-Message Mailbox:: receive(){
+Message Mailbox::receive(){
 
 	Message* msg = new Message(); //empty message
 
@@ -30,6 +33,14 @@ Message Mailbox:: receive(){
 	else{
 		return *msg; // users should test for empty message
 	}
+}
+
+int Mailbox::numOfMessages(){
+	return _mailbox.size();
+}
+
+unsigned int Mailbox::getCapacity(){
+	return MAILBOX_CAPACITY;
 }
 
 void Mailbox::lock(){

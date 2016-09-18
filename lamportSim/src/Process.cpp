@@ -6,9 +6,20 @@
  */
 
 #include "Process.h"
+#include <iostream>
 
-Process::Process() {
-	// TODO Auto-generated constructor stub
+using namespace std;
+
+Process::Process(int id, int nid, Comms* comms) {
+
+	proc_id = id;
+	num_processes = nid;
+}
+
+void Process::run() {
+
+	cout << "Process: " << proc_id << " num_proc: " << num_processes << endl;
+
 
 }
 

@@ -8,10 +8,16 @@
 #ifndef PROCESS_H_
 #define PROCESS_H_
 
+#include "Comms.h"
+
 class Process {
 public:
-	Process();
+	Process(int id, int nid, Comms* comms);
+	void run();
 	virtual ~Process();
+private:
+	int proc_id;
+	int num_processes;
 };
 
 #endif /* PROCESS_H_ */
