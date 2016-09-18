@@ -7,6 +7,7 @@
 
 #include "Process.h"
 #include <iostream>
+#include <unistd.h>
 
 using namespace std;
 
@@ -28,6 +29,7 @@ void Process::run() {
 		communications->send(outMsg, 0);
 	}
 	else{
+	    sleep(1);
 		inMsg = communications->receive(0);
 		cout<< "lclock for proc "<< proc_id << " is " << inMsg->getContent().lclock << endl;
 	}

@@ -8,7 +8,7 @@
 #ifndef MESSAGE_H_
 #define MESSAGE_H_
 
-#define MAX_PAYLOAD_SIZE (5)
+#define MAX_PAYLOAD_SIZE (10)
 
 typedef struct {
 	unsigned int lclock;

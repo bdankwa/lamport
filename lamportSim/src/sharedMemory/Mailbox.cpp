@@ -18,7 +18,7 @@ Mailbox::Mailbox(sharedMailboxes_t* mboxes, unsigned int proc) {
 
 	/*if(pthread_mutex_init(mailboxes->locks + proc, NULL) != 0){
 		perror("pthread_mutex_init");
-	}*/
+	}
 
 	if(pthread_mutex_lock(mailboxes->locks + proc) != 0){
 		perror("pthread_mutex_lock");
@@ -32,7 +32,7 @@ Mailbox::Mailbox(sharedMailboxes_t* mboxes, unsigned int proc) {
 
 	if(pthread_mutex_unlock(mailboxes->locks + proc) != 0){
 		perror("pthread_mutex_unlock");
-	}
+	} */
 
 }
 
@@ -111,7 +111,7 @@ int Mailbox::readShm(packet_t* data, unsigned int proc){
 
 	mailboxes->tail[proc]++;
 
-	cout<< "readShm:lclock = " << data->lclock << endl;
+	//cout<< "readShm:lclock = " << data->lclock << endl;
 
 	return 0;
 }

@@ -10,7 +10,7 @@
 Message::Message() {
 	// TODO Auto-generated constructor stub
 	dataSize = 0;
-	data.lclock = 25;
+	data.lclock = 26;
 }
 
 Message::Message(packet_t data) {
