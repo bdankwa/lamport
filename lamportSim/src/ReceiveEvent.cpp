@@ -23,7 +23,7 @@ void ReceiveEvent::execute(){
 
 	if( inMsg->isValid() && (processClock->getTime() <= inMsg->getContent().lclock)){
 		processClock->setTime((inMsg->getContent().lclock) + 1);
-		cout << "Process:" << process <<"Advanced my clock"<<endl;
+		//cout << "Process:" << process <<"Advanced my clock"<<endl;
 	}
 }
 

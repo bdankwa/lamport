@@ -19,7 +19,8 @@
 #define NUM_PROC (4)
 
 typedef struct{
-	semaphore_t lock;
+	//semaphore_t lock;
+	pthread_mutex_t lock;
 	unsigned int head[NUM_PROC];
 	unsigned int tail[NUM_PROC];
 	packet_t messages[NUM_PROC * MAILBOX_CAPACITY];

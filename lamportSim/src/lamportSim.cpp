@@ -28,7 +28,8 @@ int main() {
 
 	int shm_id;
 	sharedMailboxes_t* sharedMemory;
-	semaphore_t lock;
+	//semaphore_t lock;
+	pthread_mutex_t lock;
 
 	int i;
 	int pids[NUM_OF_PROCESSES];
@@ -53,7 +54,7 @@ int main() {
 		exit(EXIT_FAILURE);
 	}
 
-	semInit(&lock, 1);
+	//semInit(&lock, 1);
 	sharedMemory->lock = lock;
 
 	for(i=0; i< NUM_OF_PROCESSES; i++){
@@ -66,7 +67,7 @@ int main() {
 				exit(EXIT_FAILURE);
 			}
 			// Instantiate process object
-			Process* procObj = new Process(i, NUM_OF_PROCESSES, new Mailbox(sharedMemory, i), 5, 2);
+			Process* procObj = new Process(i, NUM_OF_PROCESSES, new Mailbox(sharedMemory, i), 5, 1000);
 			//start processing events
 			procObj->run();
 

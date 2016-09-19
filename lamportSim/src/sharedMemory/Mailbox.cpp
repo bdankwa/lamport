@@ -8,6 +8,7 @@
 #include "Mailbox.h"
 #include <string.h>
 #include <stdio.h>
+#include <pthread.h>
 
 #include <iostream>
 using namespace std;
@@ -40,13 +41,13 @@ Mailbox::Mailbox(sharedMailboxes_t* mboxes, unsigned int proc) {
 int Mailbox::send(Message* m, unsigned int destination){
 	int status = 0;
 
-	P(&mailboxes->lock);
+	//P(&mailboxes->lock);
 	//cout<< "Process-"<< proc_id << "locking for write." << endl;
-	//pthread_mutex_lock(&mailboxes->locks);
+	pthread_mutex_lock(&mailboxes->lock);
 	status = writeShm(m->getContent(), destination);
-	//pthread_mutex_unlock(&mailboxes->locks);
+	pthread_mutex_unlock(&mailboxes->lock);
 	//cout<< "Process-"<< proc_id << "unlocking write." << endl;
-	V(&mailboxes->lock);
+	//V(&mailboxes->lock);
 
 	return status;
 }
@@ -58,11 +59,11 @@ Message* Mailbox::receive(unsigned int src){
 
 	//P(&mailboxes->lock);
 	//cout<< "Process-"<< proc_id << "locking for read." << endl;
-	//pthread_mutex_lock(&mailboxes->locks);
+	pthread_mutex_lock(&mailboxes->lock);
 	if(readShm(&data,src) == -1){
 		//cout<< "Mailbox:receive - empty buffer - " << proc << endl;
 	}
-	//pthread_mutex_unlock(&mailboxes->locks);
+	pthread_mutex_unlock(&mailboxes->lock);
 	//cout<< "Process-"<< proc_id << "unlocking read." << endl;
 	//V(&mailboxes->lock);
 

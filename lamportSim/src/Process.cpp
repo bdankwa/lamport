@@ -36,15 +36,16 @@ void Process::run() {
 	int randomNumber;
 	Event* rcvEvent = NULL;
 	Event* randomEvent = NULL;
+	static unsigned int prev_time = 0;
 
 	//cout << "Process: " << proc_id << endl;
 
 	for(i=0; i<NUM_OF_ITERATIONS; i++){
 
-		randomNumber = generateRandomInt(1, 10);
+		randomNumber = generateRandomInt(1, byztProb);
 
-		if(randomNumber == 5){
-
+		if(randomNumber == byztProb/2){
+			//Byzantine event
 		}
 		else{
 			rcvEvent = new ReceiveEvent(communications, clock, proc_id);
@@ -58,30 +59,10 @@ void Process::run() {
 			randomEvent->execute();
 		}
 
-		writeToFile(logFile, proc_id, i, ((float)eventProb/10.0), ((float)byztProb/10.0), clock->getTime());
+		writeToFile(logFile, proc_id, i, (eventProb/10.0), (1.0/byztProb),
+				clock->getTime(), (clock->getTime() - prev_time));
 
-
-
-		/*Message* outMsg = new Message();
-		outMsg->setCreatedTime(randomEvent->createdAt());*/
-
-
-		/*if(proc_id != 0){
-			randomEvent->execute();
-			//communications->send(outMsg, 0);
-		}
-		else{
-		    sleep(1);
-			inMsg = communications->receive(0);
-			cout<< "process: "<< proc_id << " internal Event time: " << inMsg->getContent().lclock << endl;
-		} */
-
-		/*if(rcvEvent != NULL){
-			delete rcvEvent;
-		}
-		if(randomEvent != NULL){
-			delete randomEvent;
-		}*/
+		prev_time = clock->getTime();
 
 	}
 }
