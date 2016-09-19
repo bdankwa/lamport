@@ -10,13 +10,18 @@
 Message::Message() {
 	// TODO Auto-generated constructor stub
 	dataSize = 0;
-	data = 0;
+	data.lclock = 0;
 }
 
-Message::Message(unsigned int data) {
+Message::Message(packet_t data) {
 	// TODO Auto-generated constructor stub
 	this->data = data;
 	dataSize = sizeof(unsigned int);
+}
+
+packet_t Message::getContent(){
+
+	return data;
 }
 
 int Message::size() {

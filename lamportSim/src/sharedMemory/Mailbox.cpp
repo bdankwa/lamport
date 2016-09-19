@@ -7,53 +7,61 @@
 
 #include "Mailbox.h"
 
-Mailbox::Mailbox() {
+Mailbox::Mailbox(sharedMailboxes_t* mboxes, unsigned int proc) {
+
+	mailboxes = mboxes;
 	MAILBOX_CAPACITY = 100;
-	pthread_mutex_init(&_lock, NULL);
+
+	pthread_mutex_init(mailboxes->locks + proc, NULL);
 
 }
 
-int Mailbox::send(Message& m){
+int Mailbox::send(Message& m, unsigned int proc){
+	int status = 0;
 
-	if(_mailbox.size() > MAILBOX_CAPACITY){
-		destroyCurrentMessage();
-	}
-	_mailbox.push(m);
+	pthread_mutex_lock(mailboxes->locks + proc);
+	status = send(m.getContent(), proc);
+	pthread_mutex_unlock(mailboxes->locks + proc);
 
-	return 0;
+	return status;
 }
 
-Message Mailbox::receive(){
+Message Mailbox::receive(unsigned int proc){
+
+	packet_t data;
+
+	pthread_mutex_lock(mailboxes->locks + proc);
+	data = rcv(proc);
+	pthread_mutex_unlock(mailboxes->locks + proc);
 
 	Message* msg = new Message(); //empty message
 
-	if(!_mailbox.empty()){
-		return _mailbox.front();
-	}
-	else{
-		return *msg; // users should test for empty message
-	}
+	return *msg; // users should test for empty message
+
 }
 
 int Mailbox::numOfMessages(){
-	return _mailbox.size();
+	return 0;
 }
 
 unsigned int Mailbox::getCapacity(){
 	return MAILBOX_CAPACITY;
 }
 
-void Mailbox::lock(){
-	pthread_mutex_lock(&_lock);
+int Mailbox::send(packet_t data, unsigned int proc){
+	//TODO write to shared memory
+	//update data structures in shared memory
 
+
+	return 0;
 }
 
-void Mailbox::unlock(){
-	pthread_mutex_unlock(&_lock);
-}
+packet_t Mailbox::rcv( unsigned int proc){
 
-void Mailbox::destroyCurrentMessage(){
-	_mailbox.pop();
+	packet_t data;
+
+	return data;
+
 }
 
 Mailbox::~Mailbox() {

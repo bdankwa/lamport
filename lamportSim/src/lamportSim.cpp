@@ -16,7 +16,6 @@
 #include <unistd.h>
 
 #include "Process.h"
-#include "SharedMem.h"
 #include "Mailbox.h"
 
 using namespace std;
@@ -27,7 +26,7 @@ using namespace std;
 int main() {
 
 	int shm_id;
-	SharedMem* sharedMemory;
+	sharedMailboxes_t* sharedMemory;
 
 	int i;
 	int pid;
@@ -49,7 +48,7 @@ int main() {
 		if((pid = fork()) == 0){ // child process
 
 			/* Map shared region to caller's address space*/
-			if ((sharedMemory = (SharedMem*) mmap(NULL, 4096, PROT_WRITE | PROT_READ,
+			if ((sharedMemory = (sharedMailboxes_t*) mmap(NULL, 4096, PROT_WRITE | PROT_READ,
 					MAP_SHARED, shm_id, 0)) == (void *) -1) {
 				perror("mmap");
 				exit(EXIT_FAILURE);
@@ -57,9 +56,9 @@ int main() {
 
 
 			// Instantiate process object
-			Process* procObj = new Process(i, NUM_OF_PROCESSES, new Mailbox());
+			//Process* procObj = new Process(i, NUM_OF_PROCESSES, new Mailbox());
 			//start processing events
-			procObj->run();
+			//procObj->run();
 			exit(EXIT_SUCCESS);
 		}
 		else if (pid == -1){ // error
