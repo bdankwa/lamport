@@ -8,9 +8,11 @@
 #ifndef MESSAGE_H_
 #define MESSAGE_H_
 
+#define MAX_PAYLOAD_SIZE (5)
+
 typedef struct {
 	unsigned int lclock;
-	unsigned int payload[10];
+	unsigned int payload[MAX_PAYLOAD_SIZE];
 }packet_t;
 
 class Message {

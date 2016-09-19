@@ -14,11 +14,25 @@ Process::Process(int id, int nid, Comms* comms) {
 
 	proc_id = id;
 	num_processes = nid;
+	communications = comms;
 }
 
 void Process::run() {
 
-	cout << "Process: " << proc_id << " num_proc: " << num_processes << endl;
+	cout << "Process: " << proc_id << endl;
+
+	Message* outMsg = new Message();
+	Message* inMsg;
+
+	if(proc_id != 0){
+		communications->send(outMsg, 0);
+	}
+	else{
+		inMsg = communications->receive(0);
+		cout<< "lclock for proc "<< proc_id << " is " << inMsg->getContent().lclock << endl;
+	}
+
+
 
 
 }

@@ -18,6 +18,7 @@ public:
 private:
 	int proc_id;
 	int num_processes;
+	Comms* communications;
 };
 
 #endif /* PROCESS_H_ */

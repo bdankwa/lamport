@@ -14,6 +14,9 @@
 #include "Comms.h"
 #include "Message.h"
 
+#define MAILBOX_CAPACITY (100)
+#define NUM_PROC (4)
+
 
 /*typedef struct {
 	unsigned int lclock;
@@ -21,25 +24,24 @@
 }packet_t;*/
 
 typedef struct{
-	pthread_mutex_t locks[4];
-	unsigned int head[4];
-	unsigned int tail[4];
-	packet_t message[4];
+	pthread_mutex_t locks[NUM_PROC];
+	unsigned int head[NUM_PROC];
+	unsigned int tail[NUM_PROC];
+	packet_t messages[NUM_PROC * MAILBOX_CAPACITY];
 }sharedMailboxes_t;
 
 class Mailbox : public Comms{
 public:
 	Mailbox(sharedMailboxes_t* mailboxes, unsigned int proc);
-	int send(Message& m, unsigned int proc);
-	Message receive(unsigned int proc);
+	int send(Message* m, unsigned int proc);
+	Message* receive(unsigned int proc);
 	virtual ~Mailbox();
 	int numOfMessages();
 	unsigned int getCapacity();
 private:
 	sharedMailboxes_t* mailboxes;
-	int send(packet_t data, unsigned int);
-	packet_t rcv(unsigned int);
-	unsigned int MAILBOX_CAPACITY;
+	int writeShm(packet_t data, unsigned int);
+	int readShm(packet_t* data, unsigned int);
 };
 
 #endif /* MAILBOX_H_ */

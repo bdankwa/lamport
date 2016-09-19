@@ -12,8 +12,8 @@
 
 class Comms {
 public:
-	virtual int send(Message& m, int proc) = 0;
-	virtual Message receive(int proc) = 0;
+	virtual int send(Message* m, unsigned int proc) = 0;
+	virtual Message* receive(unsigned int proc) = 0;
 };
 
 #endif /* COMMS_H_ */

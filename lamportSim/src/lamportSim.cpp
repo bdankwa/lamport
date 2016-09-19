@@ -53,12 +53,10 @@ int main() {
 				perror("mmap");
 				exit(EXIT_FAILURE);
 			}
-
-
 			// Instantiate process object
-			//Process* procObj = new Process(i, NUM_OF_PROCESSES, new Mailbox());
+			Process* procObj = new Process(i, NUM_OF_PROCESSES, new Mailbox(sharedMemory, i));
 			//start processing events
-			//procObj->run();
+			procObj->run();
 			exit(EXIT_SUCCESS);
 		}
 		else if (pid == -1){ // error
@@ -66,8 +64,10 @@ int main() {
 			exit(EXIT_FAILURE);
 		}
 		else{ // parent, go spawn more kids
+			//cout << "waited for  process " << i << endl;
 			waitpid(pid,&status, WNOHANG);
 		}
 	}
+
 	return EXIT_SUCCESS;
 }
