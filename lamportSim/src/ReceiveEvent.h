@@ -13,7 +13,7 @@
 
 class ReceiveEvent: public Event {
 public:
-	ReceiveEvent(Comms* comms, LogicalClock* clock, unsigned int proc);
+	ReceiveEvent(Comms* comms, LogicalClock* clock, unsigned int proc, unsigned int byztProb);
 	void execute();
 	unsigned int createdAt();
 	virtual ~ReceiveEvent();
@@ -22,6 +22,7 @@ private:
 	unsigned int process;
 	LogicalClock* processClock;
 	unsigned int timeCreated;
+	unsigned int byzatineProb;
 };
 
 #endif /* RECEIVEEVENT_H_ */

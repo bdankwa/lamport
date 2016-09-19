@@ -7,23 +7,34 @@
 
 #include "ReceiveEvent.h"
 #include <iostream>
+#include "utils.h"
 
 using namespace std;
 
-ReceiveEvent::ReceiveEvent(Comms* comms, LogicalClock* clock, unsigned int proc) {
+ReceiveEvent::ReceiveEvent(Comms* comms, LogicalClock* clock, unsigned int proc, unsigned int byztProb) {
 	communications = comms;
 	process = proc;
 	processClock = clock;
+	byzatineProb = byztProb;
 	timeCreated = processClock->getTime();
 }
 
 void ReceiveEvent::execute(){
-	processClock->tick();
-	Message* inMsg = communications->receive(process);
+	int randomNumber;
 
-	if( inMsg->isValid() && (processClock->getTime() <= inMsg->getContent().lclock)){
-		processClock->setTime((inMsg->getContent().lclock) + 1);
-		//cout << "Process:" << process <<"Advanced my clock"<<endl;
+	Message* inMsg = communications->receive(process);
+	randomNumber = generateRandomInt(1, byzatineProb);
+
+	if(randomNumber == byzatineProb/2){
+		//Byzantine event
+	}
+	else{
+		processClock->tick();
+
+		if( inMsg->isValid() && (processClock->getTime() <= inMsg->getContent().lclock)){
+			processClock->setTime((inMsg->getContent().lclock) + 1);
+			//cout << "Process:" << process <<"Advanced my clock"<<endl;
+		}
 	}
 }
 

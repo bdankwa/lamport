@@ -67,7 +67,7 @@ int main() {
 				exit(EXIT_FAILURE);
 			}
 			// Instantiate process object
-			Process* procObj = new Process(i, NUM_OF_PROCESSES, new Mailbox(sharedMemory, i), 5, 1000);
+			Process* procObj = new Process(i, NUM_OF_PROCESSES, new Mailbox(sharedMemory, i), 3, 100);
 			//start processing events
 			procObj->run();
 

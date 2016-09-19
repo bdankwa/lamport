@@ -17,7 +17,7 @@
 
 using namespace std;
 
-#define NUM_OF_ITERATIONS (100)
+#define NUM_OF_ITERATIONS (10000)
 #define NUM_OF_PROC (4)
 
 Process::Process(int id, int nid, Comms* comms, unsigned int Eventprob, unsigned int byzantineProb) {
@@ -33,7 +33,7 @@ Process::Process(int id, int nid, Comms* comms, unsigned int Eventprob, unsigned
 
 void Process::run() {
 	int i;
-	int randomNumber;
+	//int randomNumber;
 	Event* rcvEvent = NULL;
 	Event* randomEvent = NULL;
 	static unsigned int prev_time = 0;
@@ -42,7 +42,7 @@ void Process::run() {
 
 	for(i=0; i<NUM_OF_ITERATIONS; i++){
 
-		randomNumber = generateRandomInt(1, byztProb);
+		/*randomNumber = generateRandomInt(1, byztProb);
 
 		if(randomNumber == byztProb/2){
 			//Byzantine event
@@ -52,6 +52,10 @@ void Process::run() {
 			if(rcvEvent != NULL){
 				rcvEvent->execute();
 			}
+		}*/
+		rcvEvent = new ReceiveEvent(communications, clock, proc_id, byztProb);
+		if(rcvEvent != NULL){
+			rcvEvent->execute();
 		}
 
 		randomEvent = createRandomEvent();
