@@ -61,3 +61,19 @@ double getCurrentTime(void){
 
 	return cur_time;
 }
+
+/******************************************************************************
+* Function name: writeToFile
+* Parameters: None
+* Return: seconds since epoch.
+*
+* Description: This function returns the current time since epoch in seconds .
+*******************************************************************************/
+void writeToFile(char* fileName, int proc, int N, double time){
+	FILE* fd;
+	if((fd = fopen(fileName, "a")) == NULL){
+		perror("Cannot open output file \n");
+		exit(EXIT_FAILURE);
+	}
+	fprintf(fd,"%i\t%i\t%i\n",proc,N,time);
+}
