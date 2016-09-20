@@ -13,7 +13,7 @@
 
 class Process {
 public:
-	Process(int id, int nid, Comms* comms, unsigned int eventProb, unsigned int byzantineProb );
+	Process(int id, int nid, Comms* comms, unsigned int* args);
 	void run();
 	virtual ~Process();
 private:
@@ -22,6 +22,7 @@ private:
 	int num_processes;
 	unsigned int eventProb;
 	unsigned int byztProb;
+	unsigned int iterations;
 	char logFile[10];
 	Comms* communications;
 	Event* createRandomEvent();

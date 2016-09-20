@@ -17,17 +17,19 @@
 
 using namespace std;
 
-#define NUM_OF_ITERATIONS (10000)
+//#define NUM_OF_ITERATIONS (10000)
 #define NUM_OF_PROC (4)
 
-Process::Process(int id, int nid, Comms* comms, unsigned int Eventprob, unsigned int byzantineProb) {
+Process::Process(int id, int nid, Comms* comms, unsigned int* args) {
 
 	clock = new LogicalClock();
 	proc_id = id;
 	num_processes = nid;
 	communications = comms;
-	eventProb = Eventprob;
-	byztProb = byzantineProb;
+	iterations = args[0];
+	eventProb = args[1];
+	byztProb = args[2];
+
 	sprintf(logFile, "process_%i",id);
 }
 
@@ -40,7 +42,7 @@ void Process::run() {
 
 	//cout << "Process: " << proc_id << endl;
 
-	for(i=0; i<NUM_OF_ITERATIONS; i++){
+	for(i=0; i<iterations; i++){
 
 		/*randomNumber = generateRandomInt(1, byztProb);
 
