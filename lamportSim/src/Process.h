@@ -11,9 +11,15 @@
 #include "Comms.h"
 #include "Event.h"
 
+typedef struct{
+	unsigned int iterations;
+	unsigned int eventProb;
+	unsigned int byzntProb;
+}procGlobalData_t;
+
 class Process {
 public:
-	Process(int id, int nid, Comms* comms, unsigned int* args);
+	Process(int id, int nid, Comms* comms, procGlobalData_t* data);
 	void run();
 	virtual ~Process();
 private:

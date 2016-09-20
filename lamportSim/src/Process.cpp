@@ -20,15 +20,15 @@ using namespace std;
 //#define NUM_OF_ITERATIONS (10000)
 #define NUM_OF_PROC (4)
 
-Process::Process(int id, int nid, Comms* comms, unsigned int* args) {
+Process::Process(int id, int nid, Comms* comms, procGlobalData_t* data) {
 
 	clock = new LogicalClock();
 	proc_id = id;
 	num_processes = nid;
 	communications = comms;
-	iterations = args[0];
-	eventProb = args[1];
-	byztProb = args[2];
+	iterations = data->iterations; //args[0];
+	eventProb = data->eventProb; //args[1];
+	byztProb = data->byzntProb; //args[2];
 
 	sprintf(logFile, "process_%i",id);
 }

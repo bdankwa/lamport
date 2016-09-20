@@ -22,8 +22,10 @@
 
 using namespace std;
 
-#define SHM_NAME "shm_post_office"
-#define SHM_SIZE (4096)
+#define SHM1_NAME "shm_post_office"
+#define SHM2_NAME "shm_global_data"
+#define SHM1_SIZE (4096)
+#define SHM2_SIZE (256)
 #define NUM_OF_PROCESSES (4)
 
 /******************************************************************************
@@ -81,8 +83,9 @@ void validateInput(int argc, char** argv, unsigned int* args){
 
 int main(int argc, char** argv) {
 
-	int shm_id;
-	sharedMailboxes_t* sharedMemory;
+	int shm1_id, shm2_id;
+	sharedMailboxes_t* mailBoxes;
+	procGlobalData_t* globalData;
 	//semaphore_t lock;
 	pthread_mutex_t lock;
 
@@ -93,48 +96,85 @@ int main(int argc, char** argv) {
 
 	validateInput(argc, argv, arguments);
 
+
 	/* create a shared memory region*/
-	if((shm_id = shm_open(SHM_NAME, O_CREAT | O_RDWR, 0666)) == -1) {
+	if((shm1_id = shm_open(SHM1_NAME, O_CREAT | O_RDWR, 0666)) == -1) {
 		perror("shm_open");
 		exit(EXIT_FAILURE);
 	}
 
 	/* truncate size of shared region to size 4k */
-	if (ftruncate(shm_id, SHM_SIZE) == -1) {
+	if (ftruncate(shm1_id, SHM1_SIZE) == -1) {
 		perror("ftruncate");
 		exit(EXIT_FAILURE);
 	}
 
 	/* Map shared region to caller's address space*/
-	if ((sharedMemory = (sharedMailboxes_t*) mmap(NULL, 4096, PROT_WRITE | PROT_READ,
-			MAP_SHARED, shm_id, 0)) == (void *) -1) {
+	if ((mailBoxes = (sharedMailboxes_t*) mmap(NULL, SHM1_SIZE, PROT_WRITE | PROT_READ,
+			MAP_SHARED, shm1_id, 0)) == (void *) -1) {
+		perror("mmap");
+		exit(EXIT_FAILURE);
+	}
+
+	/* create a shared memory region*/
+	if((shm2_id = shm_open(SHM2_NAME, O_CREAT | O_RDWR, 0666)) == -1) {
+		perror("shm_open");
+		exit(EXIT_FAILURE);
+	}
+
+	/* truncate size of shared region to size 4k */
+	if (ftruncate(shm2_id, SHM2_SIZE) == -1) {
+		perror("ftruncate");
+		exit(EXIT_FAILURE);
+	}
+
+	/* Map shared region to caller's address space*/
+	if ((globalData = (procGlobalData_t*) mmap(NULL, SHM2_SIZE, PROT_WRITE | PROT_READ,
+			MAP_SHARED, shm2_id, 0)) == (void *) -1) {
 		perror("mmap");
 		exit(EXIT_FAILURE);
 	}
 
 	//semInit(&lock, 1);
-	sharedMemory->lock = lock;
+	mailBoxes->lock = lock;
+
+	globalData->iterations = arguments[0];
+	globalData->eventProb = arguments[1];
+	globalData->byzntProb = arguments[2];
 
 	for(i=0; i< NUM_OF_PROCESSES; i++){
 		if((pids[i] = fork()) == 0){ // child process
 
 			/* Map shared region to caller's address space*/
-			if ((sharedMemory = (sharedMailboxes_t*) mmap(NULL, 4096, PROT_WRITE | PROT_READ,
-					MAP_SHARED, shm_id, 0)) == (void *) -1) {
+			if ((mailBoxes = (sharedMailboxes_t*) mmap(NULL, SHM1_SIZE, PROT_WRITE | PROT_READ,
+					MAP_SHARED, shm1_id, 0)) == (void *) -1) {
 				perror("mmap");
 				exit(EXIT_FAILURE);
 			}
+
+			/* Map shared region to caller's address space*/
+			if ((globalData = (procGlobalData_t*) mmap(NULL, SHM2_SIZE, PROT_WRITE | PROT_READ,
+					MAP_SHARED, shm2_id, 0)) == (void *) -1) {
+				perror("mmap");
+				exit(EXIT_FAILURE);
+			}
+
 			// Instantiate process object
-			Process* procObj = new Process(i, NUM_OF_PROCESSES, new Mailbox(sharedMemory, i), arguments);
+			Process* procObj = new Process(i, NUM_OF_PROCESSES, new Mailbox(mailBoxes, i), globalData);
 			//start processing events
 			procObj->run();
 
 			/* Unmap shared region from caller's address space*/
-			if(munmap(sharedMemory, SHM_SIZE) == -1) {
+			if(munmap(mailBoxes, SHM1_SIZE) == -1) {
+				perror("munmap");
+			}
+			/* Unmap shared region from caller's address space*/
+			if(munmap(globalData, SHM2_SIZE) == -1) {
 				perror("munmap");
 			}
 			/*****Unlink shared memory *******/
-			shm_unlink(SHM_NAME);
+			shm_unlink(SHM1_NAME);
+			shm_unlink(SHM2_NAME);
 
 			exit(EXIT_SUCCESS);
 		}
