@@ -12,7 +12,9 @@ class LogicalClock {
 public:
 	LogicalClock();
 	unsigned int getTime();
+	void tick();
 	void reset();
+	void setTime(unsigned int t);
 	virtual ~LogicalClock();
 private:
 	static unsigned int time;

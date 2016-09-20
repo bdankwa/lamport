@@ -12,12 +12,13 @@
 
 class InternalEvent: public Event {
 public:
-	InternalEvent();
+	InternalEvent(LogicalClock* clock);
 	void execute();
 	unsigned int createdAt();
 	virtual ~InternalEvent();
 private:
-	unsigned int timeCreated;
+	unsigned int currentTime;
+	LogicalClock* processClock;
 };
 
 #endif /* INTERNALEVENT_H_ */

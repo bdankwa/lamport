@@ -13,6 +13,7 @@
 typedef struct {
 	unsigned int lclock;
 	unsigned int payload[MAX_PAYLOAD_SIZE];
+	unsigned int isValid;
 }packet_t;
 
 class Message {
@@ -21,6 +22,8 @@ public:
 	Message(packet_t);
 	int size();
 	packet_t getContent();
+	void setValid(bool isvalid);
+	bool isValid();
 	void setCreatedTime(unsigned int time);
 	virtual ~Message();
 private:

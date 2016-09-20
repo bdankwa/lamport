@@ -11,7 +11,7 @@ OBJDIR  = ./obj/
 SMEMDIR = ./src/sharedMemory/
 
 OBJ   = $(OBJDIR)lamportSim.o $(OBJDIR)InternalEvent.o \
-	   $(OBJDIR)LogicalClock.o $(OBJDIR)Mailbox.o \
+	   $(OBJDIR)LogicalClock.o $(OBJDIR)Mailbox.o $(OBJDIR)utils.o \
 	   $(OBJDIR)Message.o $(OBJDIR)Process.o $(OBJDIR)ReceiveEvent.o \
 	   $(OBJDIR)SendEvent.o 
 
@@ -21,6 +21,7 @@ TARGET = lmptSim
 INCLUDES = -I$(SRCDIR) -I$(SMEMDIR)
 LIBRARIES =.
 CPP = g++
+CC = gcc
 CFLAGS = -Wall -c
 LFLAGS = -lpthread -lrt
 #------------------------------------------------------------------------------
@@ -44,7 +45,7 @@ $(OBJDIR)LogicalClock.o : $(SRCDIR)LogicalClock.cpp
 $(OBJDIR)Message.o : $(SRCDIR)Message.cpp
 	$(CPP) $(CFLAGS) $(INCLUDES) $(SRCDIR)Message.cpp -o $(OBJDIR)Message.o
 	
-$(OBJDIR)Process.o : $(SRCDIR)Process.cpp
+$(OBJDIR)Process.o : $(SRCDIR)Process.cpp 
 	$(CPP) $(CFLAGS) $(INCLUDES) $(SRCDIR)Process.cpp -o $(OBJDIR)Process.o
 
 $(OBJDIR)ReceiveEvent.o : $(SRCDIR)ReceiveEvent.cpp
@@ -55,6 +56,9 @@ $(OBJDIR)SendEvent.o : $(SRCDIR)SendEvent.cpp
 	
 $(OBJDIR)Mailbox.o : $(SMEMDIR)Mailbox.cpp
 	$(CPP) $(CFLAGS) $(INCLUDES) $(SMEMDIR)Mailbox.cpp -o $(OBJDIR)Mailbox.o
+	
+$(OBJDIR)utils.o : $(SRCDIR)utils.c
+	$(CPP) $(CFLAGS) -I$(INCLUDES) $(SRCDIR)utils.c -o $(OBJDIR)utils.o
 	
 
 clean:

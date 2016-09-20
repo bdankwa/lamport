@@ -7,18 +7,19 @@
 
 #include "InternalEvent.h"
 
-InternalEvent::InternalEvent() {
-	LogicalClock* clock = new LogicalClock();
-	timeCreated = clock->getTime();
+InternalEvent::InternalEvent(LogicalClock* clock) {
+	processClock = clock;
+	currentTime = 0;
 }
 
 void InternalEvent::execute(){
-	//Do nothing for internal event
+	processClock->tick();
+	currentTime = processClock->getTime();
 
 }
 
 unsigned int InternalEvent::createdAt(){
-	return timeCreated;
+	return currentTime;
 
 }
 
