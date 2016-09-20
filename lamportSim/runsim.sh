@@ -1,5 +1,5 @@
 #!/bin/bash
-numIter=10000000
+numIter=1000000
 byztProb=(10 1000 10000)
 eventProb=(1 2 3 4 5)
 
@@ -16,7 +16,7 @@ do
 		./lmptSim $numIter "$j" "$i" 
 		mv $p0 $p0"_"$i"_"$j
 		mv $p1 $p1"_"$i"_"$j
-		mv $p2 $p3"_"$i"_"$j
+		mv $p2 $p2"_"$i"_"$j
 		mv $p3 $p3"_"$i"_"$j
 	done
 done
