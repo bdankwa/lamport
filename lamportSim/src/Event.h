@@ -14,6 +14,9 @@ class Event {
 public:
 	virtual void execute() = 0;
 	virtual unsigned int createdAt() = 0;
+	virtual ~Event(){
+		;
+	}
 };
 
 #endif /* EVENT_H_ */
