@@ -33,33 +33,38 @@ Mailbox::Mailbox(sharedMailboxes_t* mboxes, unsigned int proc) {
 	if(pthread_mutex_unlock(mailboxes->locks + proc) != 0){
 		perror("pthread_mutex_unlock");
 	} */
+	proc_id = proc;
 
 }
 
-int Mailbox::send(Message* m, unsigned int proc){
+int Mailbox::send(Message* m, unsigned int destination){
 	int status = 0;
 
 	P(&mailboxes->lock);
+	cout<< "Process-"<< proc_id << "locking for write." << endl;
 	//pthread_mutex_lock(&mailboxes->locks);
-	status = writeShm(m->getContent(), proc);
+	status = writeShm(m->getContent(), destination);
 	//pthread_mutex_unlock(&mailboxes->locks);
+	cout<< "Process-"<< proc_id << "unlocking write." << endl;
 	V(&mailboxes->lock);
 
 	return status;
 }
 
-Message* Mailbox::receive(unsigned int proc){
+Message* Mailbox::receive(unsigned int src){
 
 	packet_t data;
 	data.isValid = 0;
 
-	P(&mailboxes->lock);
+	//P(&mailboxes->lock);
+	//cout<< "Process-"<< proc_id << "locking for read." << endl;
 	//pthread_mutex_lock(&mailboxes->locks);
-	if(readShm(&data,proc) == -1){
-		cout<< "Mailbox:receive - empty buffer" << endl;
+	if(readShm(&data,src) == -1){
+		//cout<< "Mailbox:receive - empty buffer - " << proc << endl;
 	}
 	//pthread_mutex_unlock(&mailboxes->locks);
-	V(&mailboxes->lock);
+	//cout<< "Process-"<< proc_id << "unlocking read." << endl;
+	//V(&mailboxes->lock);
 
 	Message* msg = new Message(data); //empty message
 
@@ -75,15 +80,15 @@ unsigned int Mailbox::getCapacity(){
 	return MAILBOX_CAPACITY;
 }
 
-int Mailbox::writeShm(packet_t data, unsigned int proc){
+int Mailbox::writeShm(packet_t data, unsigned int destination){
 	//TODO write to shared memory
 	//update data structures in shared memory
 	unsigned int index = 0;
 	unsigned int head;
 	unsigned int tail;
 
-	head = mailboxes->head[proc];
-	tail = mailboxes->tail[proc];
+	head = mailboxes->head[destination];
+	tail = mailboxes->tail[destination];
 
 	if((head - tail) == MAILBOX_CAPACITY){
 		return -1; // buffer full
@@ -92,29 +97,29 @@ int Mailbox::writeShm(packet_t data, unsigned int proc){
 	index = head % MAILBOX_CAPACITY;
 	//*(mailboxes->messages + (proc * MAILBOX_CAPACITY) + index) = data;
 
-	mailboxes->head[proc]++;
+	mailboxes->head[destination]++;
 
 	//cout<< "writeShm:head = " << mailboxes->head[proc] << " proc: " << proc  << endl;
 
 	return 0;
 }
 
-int Mailbox::readShm(packet_t* data, unsigned int proc){
+int Mailbox::readShm(packet_t* data, unsigned int destination){
 	unsigned int index = 0;
 	unsigned int head;
 	unsigned int tail;
 
-	head = mailboxes->head[proc];
-	tail = mailboxes->tail[proc];
+	head = mailboxes->head[destination];
+	tail = mailboxes->tail[destination];
 
 	if((head - tail) == 0){
 		return -1; // empty buffer
 	}
 
 	index = tail % MAILBOX_CAPACITY;
-	*data = *(mailboxes->messages + (proc * MAILBOX_CAPACITY) + index);
+	*data = *(mailboxes->messages + (destination * MAILBOX_CAPACITY) + index);
 
-	mailboxes->tail[proc]++;
+	mailboxes->tail[destination]++;
 
 	//cout<< "readShm:lclock = " << data->lclock << endl;
 

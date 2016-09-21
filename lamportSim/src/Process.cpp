@@ -73,7 +73,7 @@ Event* Process::createRandomEvent() {
 	Event* event;
 
 	int selection = generateRandomInt(1, 10);
-	unsigned int randomProc = generateRandomInt(1, NUM_OF_PROC);
+	unsigned int randomProc = generateRandomInt(0, NUM_OF_PROC-1);
 
 	switch (eventProb) {
 	case 1 : // 0.1 probability

@@ -90,6 +90,7 @@ int main() {
 
 	for(i=0; i< NUM_OF_PROCESSES; i++){
 	    while (-1 == waitpid(pids[i], &status, 0));
+	    cout << "Waited on: "<< i << endl;
 	    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
 	        cerr << "Process " << i << " (pid " << pids[i] << ") failed" << endl;
 	        exit(1);

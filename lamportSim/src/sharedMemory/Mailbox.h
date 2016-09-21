@@ -43,6 +43,7 @@ private:
 	sharedMailboxes_t* mailboxes;
 	int writeShm(packet_t data, unsigned int);
 	int readShm(packet_t* data, unsigned int);
+	unsigned int proc_id;
 };
 
 #endif /* MAILBOX_H_ */
