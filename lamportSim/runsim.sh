@@ -15,5 +15,8 @@ do
 		echo "Running simulation with" $numIter "iterations, with event prob" "$j" "and bzt prob" "$i".
 		./lmptSim $numIter "$j" "$i" 
 		mv $p0 $p0"_"$i"_"$j
+		mv $p1 $p1"_"$i"_"$j
+		mv $p2 $p3"_"$i"_"$j
+		mv $p3 $p3"_"$i"_"$j
 	done
 done
