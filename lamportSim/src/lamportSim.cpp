@@ -52,7 +52,7 @@ void printUsage(void){
 *******************************************************************************/
 void validateInput(int argc, char** argv, unsigned int* args){
 	int i, j, arg;
-	char cmdArg[3];
+	char cmdArg[100];
 
 
 	if(argc != 4){
