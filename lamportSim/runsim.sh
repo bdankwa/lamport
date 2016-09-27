@@ -1,5 +1,5 @@
 #!/bin/bash
-numIter=1000000
+numIter=10000000
 byztProb=(10 1000 10000)
 eventProb=(1 2 3 4 5)
 
