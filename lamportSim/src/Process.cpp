@@ -96,7 +96,7 @@ Event* Process::createRandomEvent() {
 		if(selection == 1){
 			event = new InternalEvent(clock);
 		}
-		if(selection == 10){
+		if(selection == 10 && proc_id != randomDestination){
 			event = new SendEvent(communications, randomDestination, clock);
 		}
 		break;
@@ -104,7 +104,7 @@ Event* Process::createRandomEvent() {
 		if(selection <= 2){
 			event = new InternalEvent(clock);
 		}
-		if(selection >= 9){
+		if(selection >= 9 && proc_id != randomDestination){
 			event = new SendEvent(communications, randomDestination, clock);
 		}
 		break;
@@ -112,7 +112,7 @@ Event* Process::createRandomEvent() {
 		if(selection <= 3){
 			event =  new InternalEvent(clock);
 		}
-		if(selection >= 8){
+		if(selection >= 8 && proc_id != randomDestination){
 			event =  new SendEvent(communications, randomDestination, clock);
 		}
 		break;
@@ -120,7 +120,7 @@ Event* Process::createRandomEvent() {
 		if(selection <= 4){
 			event =  new InternalEvent(clock);
 		}
-		if(selection >= 7){
+		if(selection >= 7 && proc_id != randomDestination){
 			event =  new SendEvent(communications, randomDestination, clock);
 		}
 		break;
@@ -128,7 +128,7 @@ Event* Process::createRandomEvent() {
 		if(selection <= 5){
 			event =  new InternalEvent(clock);
 		}
-		if(selection >= 6){
+		if(selection >= 6 && proc_id != randomDestination){
 			event =  new SendEvent(communications, randomDestination, clock);
 		}
 		break;

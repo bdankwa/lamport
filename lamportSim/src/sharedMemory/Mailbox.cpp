@@ -91,9 +91,9 @@ int Mailbox::writeShm(packet_t data, unsigned int destination){
 	head = mailboxes->head[destination];
 	tail = mailboxes->tail[destination];
 
-	if((head - tail) == MAILBOX_CAPACITY){
+	/*if((head - tail) == MAILBOX_CAPACITY){
 		return -1; // buffer full
-	}
+	}*/
 
 	index = head % MAILBOX_CAPACITY;
 	(mailboxes->messages + (destination * MAILBOX_CAPACITY))[index] = data;

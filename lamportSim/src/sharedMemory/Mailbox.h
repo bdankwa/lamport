@@ -15,7 +15,7 @@
 #include "Message.h"
 #include "semaphore.h"
 
-#define MAILBOX_CAPACITY (20)
+#define MAILBOX_CAPACITY (2)
 #define NUM_PROC (4)
 
 typedef struct{
