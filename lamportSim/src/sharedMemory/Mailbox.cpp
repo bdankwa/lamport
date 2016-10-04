@@ -59,11 +59,11 @@ Message* Mailbox::receive(unsigned int src){
 
 	//P(&mailboxes->lock);
 	//cout<< "Process-"<< proc_id << "locking for read." << endl;
-	pthread_mutex_lock(&mailboxes->lock);
+	//pthread_mutex_lock(&mailboxes->lock);
 	if(readShm(&data,src) == -1){
 		//cout<< "Mailbox:receive - empty buffer - " << proc << endl;
 	}
-	pthread_mutex_unlock(&mailboxes->lock);
+	//pthread_mutex_unlock(&mailboxes->lock);
 	//cout<< "Process-"<< proc_id << "unlocking read." << endl;
 	//V(&mailboxes->lock);
 

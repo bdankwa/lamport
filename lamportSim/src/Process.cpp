@@ -39,12 +39,12 @@ void Process::run() {
 	Event* rcvEvent = NULL;
 	Event* randomEvent = NULL;
 	static unsigned int prev_time = 0;
-	//FILE* fd;
+	FILE* fd;
 
-	/*if((fd = fopen(logFile, "a")) == NULL){
+	if((fd = fopen(logFile, "a")) == NULL){
 		perror("Cannot open output file \n");
 		exit(EXIT_FAILURE);
-	}*/
+	}
 
 	//cout << "Process: " << proc_id << endl;
 
@@ -71,17 +71,17 @@ void Process::run() {
 			randomEvent->execute();
 		}
 
-		writeToFile(logFile, proc_id, i, (eventProb/10.0), (1.0/byztProb),
-				clock->getTime(), (clock->getTime() - prev_time));
-
-		/*fprintf(fd,"%i\t%i\t%f\t%f\t%i\t%i\n",proc_id, i, (eventProb/10.0), (1.0/byztProb),
+		/*writeToFile(logFile, proc_id, i, (eventProb/10.0), (1.0/byztProb),
 				clock->getTime(), (clock->getTime() - prev_time));*/
+
+		fprintf(fd,"%i\t%i\t%f\t%f\t%i\t%i\n",proc_id, i, (eventProb/10.0), (1.0/byztProb),
+				clock->getTime(), (clock->getTime() - prev_time));
 
 		prev_time = clock->getTime();
 
 	}
 
-	//fclose(fd);
+	fclose(fd);
 }
 
 Event* Process::createRandomEvent() {
