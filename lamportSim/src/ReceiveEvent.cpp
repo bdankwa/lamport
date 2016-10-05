@@ -20,13 +20,15 @@ ReceiveEvent::ReceiveEvent(Comms* comms, LogicalClock* clock, unsigned int proc,
 }
 
 void ReceiveEvent::execute(){
-	int randomNumber;
+	unsigned int randomNumber;
 
 	Message* inMsg = communications->receive(process);
 	randomNumber = generateRandomInt(1, byzatineProb);
 
 	if(randomNumber == byzatineProb/2){
-		//Byzantine event
+		/***********************************************
+		 * Byzantine failure - Do nothing
+		 *****************************************/
 	}
 	else{
 		processClock->tick();

@@ -13,6 +13,9 @@ InternalEvent::InternalEvent(LogicalClock* clock) {
 }
 
 void InternalEvent::execute(){
+	/**********************************
+	 * Internal event - only advance clock
+	 *************************************/
 	processClock->tick();
 	currentTime = processClock->getTime();
 

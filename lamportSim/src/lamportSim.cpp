@@ -3,7 +3,7 @@
 // Author      : Boakye Dankwa
 // Version     :
 // Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Description : Clock drift and synchronization simulation
 //============================================================================
 
 #include <iostream>
@@ -142,6 +142,11 @@ int main(int argc, char** argv) {
 	globalData->eventProb = arguments[1];
 	globalData->byzntProb = arguments[2];
 
+	/************************************************************
+	 * Create processes, attach shared memory (mailboxes) and
+	 * global data and start running simulation.
+	 ************************************************************/
+
 	for(i=0; i< NUM_OF_PROCESSES; i++){
 		if((pids[i] = fork()) == 0){ // child process
 
@@ -187,9 +192,12 @@ int main(int argc, char** argv) {
 		}
 	}
 
+	/************************************************************
+	 * Parent process waits for children.
+	 ***********************************************************/
 	for(i=0; i< NUM_OF_PROCESSES; i++){
 	    while (-1 == waitpid(pids[i], &status, 0));
-	    cout << "Waited on: "<< i << endl;
+	    //cout << "Waited on: "<< i << endl;
 	    if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
 	        cerr << "Process " << i << " (pid " << pids[i] << ") failed" << endl;
 	        exit(1);

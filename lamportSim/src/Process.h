@@ -24,7 +24,7 @@ public:
 	virtual ~Process();
 private:
 	LogicalClock* clock;
-	int proc_id;
+	unsigned int proc_id;
 	int num_processes;
 	unsigned int eventProb;
 	unsigned int byztProb;

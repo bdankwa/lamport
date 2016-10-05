@@ -13,14 +13,14 @@
 
 class SendEvent: public Event {
 public:
-	SendEvent(Comms* comms, unsigned int proc, LogicalClock* clock);
+	SendEvent(Comms* comms, unsigned int dest, LogicalClock* clock);
 	void execute();
 	unsigned int createdAt();
 	virtual ~SendEvent();
 private:
 	unsigned int timeCreated;
 	Comms* communications;
-	unsigned int process;
+	unsigned int destination;
 	LogicalClock* processClock;
 };
 

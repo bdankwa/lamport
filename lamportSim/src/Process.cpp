@@ -17,7 +17,6 @@
 
 using namespace std;
 
-//#define NUM_OF_ITERATIONS (10000)
 #define NUM_OF_PROC (4)
 
 Process::Process(int id, int nid, Comms* comms, procGlobalData_t* data) {
@@ -34,8 +33,7 @@ Process::Process(int id, int nid, Comms* comms, procGlobalData_t* data) {
 }
 
 void Process::run() {
-	int i;
-	//int randomNumber;
+	unsigned int i;
 	Event* rcvEvent = NULL;
 	Event* randomEvent = NULL;
 	static unsigned int prev_time = 0;
@@ -46,26 +44,20 @@ void Process::run() {
 		exit(EXIT_FAILURE);
 	}
 
-	//cout << "Process: " << proc_id << endl;
-
 	for(i=0; i<iterations; i++){
 
-		/*randomNumber = generateRandomInt(1, byztProb);
-
-		if(randomNumber == byztProb/2){
-			//Byzantine event
-		}
-		else{
-			rcvEvent = new ReceiveEvent(communications, clock, proc_id);
-			if(rcvEvent != NULL){
-				rcvEvent->execute();
-			}
-		}*/
+		/*******************************************************
+		 * create and execute a receive event.
+		 *  - Byzantine failure is implemented in event object
+		 *******************************************************/
 		rcvEvent = new ReceiveEvent(communications, clock, proc_id, byztProb);
 		if(rcvEvent != NULL){
 			rcvEvent->execute();
 		}
 
+		/*******************************************************
+		 * create and execute a random event (internal or send).
+		 *******************************************************/
 		randomEvent = createRandomEvent();
 		if(randomEvent != NULL){
 			randomEvent->execute();
